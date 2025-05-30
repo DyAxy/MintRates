@@ -105,7 +105,7 @@
         "symbol": "$"
     },
     "BTC": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/20bf.svg",
+        "icon": "",
         "displayName": "比特币",
         "symbol": "₿"
     },
@@ -790,17 +790,17 @@
         "symbol": ""
     },
     "XAF": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f4b0.svg",
+        "icon": "",
         "displayName": "中非 CFA 法郎",
         "symbol": ""
     },
     "XAG": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f948.svg",
+        "icon": "",
         "displayName": "白银（盎司）",
         "symbol": ""
     },
     "XAU": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1fa99.svg",
+        "icon": "",
         "displayName": "黄金（盎司）",
         "symbol": ""
     },
@@ -810,12 +810,12 @@
         "symbol": "$"
     },
     "XDR": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f310.svg",
+        "icon": "",
         "displayName": "特别提款权",
         "symbol": ""
     },
     "XOF": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f4b8.svg",
+        "icon": "",
         "displayName": "西非 CFA 法郎",
         "symbol": ""
     },

@@ -89,83 +89,86 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                 }, 50);
               }}
             >
-              <div className="flex flex-row items-center gap-2">
+              <div className="flex flex-row items-center gap-2 max-w-[50%]">
                 <Image
                   radius="none"
-                  src={currencyUtil.currencyList[item].icon}
+                  src={currencyUtil.currencyList[item].icon || "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2753.svg"}
                   alt={item}
                   width={32}
                   height={32}
                 />
-                <span className="text-large text-[var(--tg-theme-text-color)] font-semibold">
+                <span className="text-lg text-[var(--tg-theme-text-color)] font-semibold">
                   {currencyUtil.currencyList[item].displayName}
                 </span>
-                <span className="text-medium text-[var(--tg-theme-subtitle-text-color)]">
-                  {item}
-                </span>
               </div>
-              <div className="flex flex-col items-end">
-                <div className="flex flex-row items-center">
-                  {selectedIndex === index ? (
-                    // 只有选中的项目显示可编辑的Input
-                    <Input
-                      ref={(el) => {
-                        inputRefs.current[index] = el;
-                      }}
-                      onFocus={(e) => {
-                        // 聚焦时，如果小数点后超过2位，则截取到2位
-                        const currentValue = parseFloat(e.target.value);
-                        if (!isNaN(currentValue)) {
-                          const decimalPlaces = (
-                            currentValue.toString().split(".")[1] || ""
-                          ).length;
-                          if (decimalPlaces > 2) {
-                            const truncatedValue =
-                              Math.floor(currentValue * 100) / 100;
-                            setSelectedValue(truncatedValue);
-                            setNumbers(
-                              currencyUtil.refreshNumbers({
-                                currencies,
-                                baseIndex: selectedIndex,
-                                baseValue: truncatedValue,
-                              })
-                            );
-                          }
-                        }
-                      }}
-                      value={selectedValue.toString()}
-                      onValueChange={(value) => {
-                        const numericValue = parseFloat(value);
-                        if (!isNaN(numericValue)) {
-                          setSelectedValue(numericValue);
+              <div className="flex flex-col items-end max-w-[50%]">
+                {selectedIndex === index ? (
+                  // 只有选中的项目显示可编辑的Input
+                  <Input
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
+                    onFocus={(e) => {
+                      // 聚焦时，如果小数点后超过2位，则截取到2位
+                      const currentValue = parseFloat(e.target.value);
+                      if (!isNaN(currentValue)) {
+                        const decimalPlaces = (
+                          currentValue.toString().split(".")[1] || ""
+                        ).length;
+                        if (decimalPlaces > 2) {
+                          const truncatedValue =
+                            Math.floor(currentValue * 10000) / 10000;
+                          setSelectedValue(truncatedValue);
                           setNumbers(
                             currencyUtil.refreshNumbers({
                               currencies,
                               baseIndex: selectedIndex,
-                              baseValue: numericValue,
+                              baseValue: truncatedValue,
                             })
                           );
                         }
-                      }}
-                      classNames={{
-                        inputWrapper: cn(
-                          "rounded-none shadow-none",
-                          "bg-transparent",
-                          "data-[hover=true]:bg-transparent",
-                          "group-data-[focus=true]:bg-transparent",
-                        ),
-                        input: cn("text-large font-medium text-right",
-                          "group-data-[has-value=true]:text-[var(--tg-theme-text-color)]",
-                        ),
-                      }}
-                    />
-                  ) : (
-                    // 其他项目显示只读的数值
-                    <span className="text-large font-medium px-3 py-2 min-w-24 text-right text-[var(--tg-theme-subtitle-text-color)]">
-                      {numbers.length === currencies.length &&
-                        numbers[index].toFixed(2)}
-                    </span>
-                  )}
+                      }
+                    }}
+                    value={selectedValue.toString()}
+                    onValueChange={(value) => {
+                      const numericValue = parseFloat(value);
+                      if (!isNaN(numericValue)) {
+                        setSelectedValue(numericValue);
+                        setNumbers(
+                          currencyUtil.refreshNumbers({
+                            currencies,
+                            baseIndex: selectedIndex,
+                            baseValue: numericValue,
+                          })
+                        );
+                      }
+                    }}
+                    classNames={{
+                      inputWrapper: cn(
+                        "rounded-none shadow-none",
+                        "bg-transparent pr-0",
+                        "data-[hover=true]:bg-transparent",
+                        "group-data-[focus=true]:bg-transparent"
+                      ),
+                      input: cn(
+                        "text-large font-medium text-right",
+                        "group-data-[has-value=true]:text-[var(--tg-theme-text-color)]"
+                      ),
+                    }}
+                  />
+                ) : (
+                  <span className="w-full text-large font-medium pl-3 py-2 text-right text-[var(--tg-theme-subtitle-text-color)] truncate">
+                    {numbers.length === currencies.length &&
+                      numbers[index].toFixed(4)}
+                  </span>
+                )}
+                <div className="flex flex-row items-center gap-1 text-xs">
+                  <span className="text-[var(--tg-theme-text-color)] font-semibold">
+                    {item}
+                  </span>
+                  <span className="text-[var(--tg-theme-subtitle-text-color)]">
+                    {currencyUtil.currencyList[item].symbol}
+                  </span>
                 </div>
               </div>
             </div>

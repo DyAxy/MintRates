@@ -98,7 +98,7 @@ export const CurrencyDrawer = ({
                       <div className="flex flex-row items-center gap-2">
                         <Image
                           radius="none"
-                          src={currencyList[item].icon}
+                          src={currencyList[item].icon || "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2753.svg"}
                           alt={item}
                           width={32}
                           height={32}
