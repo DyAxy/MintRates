@@ -3,9 +3,17 @@
 import useSWR from "swr";
 import axios from "axios";
 import { CurrencyList } from "@/components/currencyList";
-import { Button } from "@heroui/react";
+import {
+  initDataRaw as _initDataRaw,
+  initDataState as _initDataState,
+  useSignal,
+} from "@telegram-apps/sdk-react";
 
 export default function Home() {
+  const initDataRaw = useSignal(_initDataRaw);
+  const initDataState = useSignal(_initDataState);
+  console.log("initDataRaw", initDataRaw);
+  console.log("initDataState", initDataState);
   const { data, isLoading } = useSWR("rate", async (url: string) => {
     try {
       const { data } = await axios.get(url);
@@ -30,7 +38,7 @@ export default function Home() {
     );
   }
   return (
-    <div className="flex flex-col items-center justify-between h-dvh">
+    <div className="flex flex-col items-center justify-between h-dvh bg-[var(--tg-theme-bg-color)]">
       <div className="flex flex-col w-full h-[65%]">
         {data && <CurrencyList rateData={data} />}
       </div>
