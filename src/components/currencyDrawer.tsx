@@ -46,23 +46,97 @@ export const CurrencyDrawer = ({
     setFiltered(Object.keys(currencyList));
   }, [currencyList]);
 
+  const [isDragging, setIsDragging] = useState(false);
+  const [startY, setStartY] = useState(0);
+  const [currentHeight, setCurrentHeight] = useState(100); // 初始高度百分比
+
+  // 添加事件处理函数
+  const handleStart = (clientY: number) => {
+    setIsDragging(true);
+    setStartY(clientY);
+  };
+
+  const handleMove = (clientY: number) => {
+    if (!isDragging) return;
+
+    const deltaY = startY - clientY;
+    const windowHeight = window.innerHeight;
+    const heightChange = (deltaY / windowHeight) * 100;
+
+    let newHeight = currentHeight + heightChange;
+    newHeight = Math.max(0, Math.min(100, newHeight)); // 限制在0%-100%之间
+
+    setCurrentHeight(newHeight);
+    setStartY(clientY);
+  };
+
+  const handleEnd = () => {
+    setIsDragging(false);
+
+    if (currentHeight <= 50) {
+      // 如果高度小于等于50%，自动关闭抽屉
+      onOpenChange(false);
+      // 重置高度为满屏
+      setTimeout(() => {
+        setCurrentHeight(100);
+      }, 300); // 延迟重置，等待关闭动画完成
+    } else {
+      // 如果高度大于50%，返回到100%
+      setCurrentHeight(100);
+    }
+  };
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentHeight(100);
+    }
+  }, [isOpen]);
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => handleMove(e.clientY);
+    const handleTouchMove = (e: TouchEvent) => handleMove(e.touches[0].clientY);
+    const handleMouseUp = () => handleEnd();
+    const handleTouchEnd = () => handleEnd();
+
+    if (isDragging) {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
+    }
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isDragging, startY, currentHeight]);
+
   return (
     <Drawer
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
       radius="none"
-      className="min-h-[100%] bg-[var(--tg-theme-secondary-bg-color)]"
+      className="bg-[var(--tg-theme-secondary-bg-color)] max-h-[100%]"
+      style={{ height: `${currentHeight}%` }}
+      hideCloseButton
     >
       <DrawerContent>
         {(onClose) => (
           <>
-            <DrawerHeader className="w-full items-center flex justify-center bg-[var(--tg-theme-header-bg-color)]">
-              <span className="text-[var(--tg-theme-text-color)]">
-                更换货币
-              </span>
-            </DrawerHeader>
-            <div className="sticky top-0 z-50 p-4 bg-[var(--tg-theme-header-bg-color)]">
+            <DrawerHeader className="p-4 w-full items-center flex flex-col justify-center bg-[var(--tg-theme-bg-color)]">
+              <div
+                className="flex justify-center items-center w-full pb-4 cursor-grab active:cursor-grabbing"
+                onMouseDown={(e) => handleStart(e.clientY)}
+                onTouchStart={(e) => handleStart(e.touches[0].clientY)}
+              >
+                <div
+                  className={cn(
+                    "bg-[var(--tg-theme-hint-color)] h-1.5 w-40 rounded-full transition-opacity",
+                    isDragging ? "opacity-70" : "opacity-50 hover:opacity-70"
+                  )}
+                />
+              </div>
               <Input
                 radius="lg"
                 placeholder="搜索货币"
@@ -72,7 +146,7 @@ export const CurrencyDrawer = ({
                 value={search}
                 onValueChange={setSearch}
               />
-            </div>
+            </DrawerHeader>
             <ScrollShadow>
               <DrawerBody className="p-4">
                 <div className="flex flex-col">
@@ -98,7 +172,10 @@ export const CurrencyDrawer = ({
                       <div className="flex flex-row items-center gap-2">
                         <Image
                           radius="none"
-                          src={currencyList[item].icon || "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2753.svg"}
+                          src={
+                            currencyList[item].icon ||
+                            "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2753.svg"
+                          }
                           alt={item}
                           width={32}
                           height={32}
