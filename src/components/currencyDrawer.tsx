@@ -1,4 +1,5 @@
 import {
+  Button,
   Chip,
   cn,
   Drawer,
@@ -30,121 +31,83 @@ export const CurrencyDrawer = ({
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (!search) return setFiltered(Object.keys(currencyList));
+    const allCurrencies = Object.keys(currencyList);
+
+    if (!search) {
+      const prioritized = [
+        ...currencies,
+        ...allCurrencies.filter((item) => !currencies.includes(item)),
+      ];
+      setFiltered(prioritized);
+      return;
+    }
+
     const searchLower = search.toLowerCase();
-    const result = Object.keys(currencyList).filter((item) => {
+    const result = allCurrencies.filter((item) => {
       const currency = currencyList[item];
       return (
         item.toLowerCase().includes(searchLower) ||
         currency.displayName.toLowerCase().includes(searchLower)
       );
     });
-    setFiltered(result);
-  }, [search]);
 
-  useEffect(() => {
-    setFiltered(Object.keys(currencyList));
-  }, [currencyList]);
+    const prioritizedResult = [
+      ...result.filter((item) => currencies.includes(item)),
+      ...result.filter((item) => !currencies.includes(item)),
+    ];
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [startY, setStartY] = useState(0);
-  const [currentHeight, setCurrentHeight] = useState(100); // 初始高度百分比
-
-  // 添加事件处理函数
-  const handleStart = (clientY: number) => {
-    setIsDragging(true);
-    setStartY(clientY);
-  };
-
-  const handleMove = (clientY: number) => {
-    if (!isDragging) return;
-
-    const deltaY = startY - clientY;
-    const windowHeight = window.innerHeight;
-    const heightChange = (deltaY / windowHeight) * 100;
-
-    let newHeight = currentHeight + heightChange;
-    newHeight = Math.max(0, Math.min(100, newHeight)); // 限制在0%-100%之间
-
-    setCurrentHeight(newHeight);
-    setStartY(clientY);
-  };
-
-  const handleEnd = () => {
-    setIsDragging(false);
-
-    if (currentHeight <= 50) {
-      // 如果高度小于等于50%，自动关闭抽屉
-      onOpenChange(false);
-      // 重置高度为满屏
-      setTimeout(() => {
-        setCurrentHeight(100);
-      }, 300); // 延迟重置，等待关闭动画完成
-    } else {
-      // 如果高度大于50%，返回到100%
-      setCurrentHeight(100);
-    }
-  };
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentHeight(100);
-    }
-  }, [isOpen]);
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => handleMove(e.clientY);
-    const handleTouchMove = (e: TouchEvent) => handleMove(e.touches[0].clientY);
-    const handleMouseUp = () => handleEnd();
-    const handleTouchEnd = () => handleEnd();
-
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.addEventListener("touchmove", handleTouchMove);
-      document.addEventListener("touchend", handleTouchEnd);
-    }
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-  }, [isDragging, startY, currentHeight]);
+    setFiltered(prioritizedResult);
+  }, [search, currencyList, currencies]);
 
   return (
     <Drawer
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      placement="bottom"
+      placement="left"
       radius="none"
-      className="bg-[var(--tg-theme-secondary-bg-color)] max-h-[100%]"
-      style={{ height: `${currentHeight}%` }}
+      className="bg-[var(--tg-theme-secondary-bg-color)]"
       hideCloseButton
+      size="full"
     >
       <DrawerContent>
         {(onClose) => (
           <>
-            <DrawerHeader className="p-4 w-full items-center flex flex-col justify-center bg-[var(--tg-theme-bg-color)]">
-              <div
-                className="flex justify-center items-center w-full pb-4 cursor-grab active:cursor-grabbing"
-                onMouseDown={(e) => handleStart(e.clientY)}
-                onTouchStart={(e) => handleStart(e.touches[0].clientY)}
-              >
-                <div
-                  className={cn(
-                    "bg-[var(--tg-theme-hint-color)] h-1.5 w-40 rounded-full transition-opacity",
-                    isDragging ? "opacity-70" : "opacity-50 hover:opacity-70"
-                  )}
-                />
+            <DrawerHeader className="p-4 w-full items-center flex flex-col gap-3 justify-center bg-[var(--tg-theme-bg-color)]">
+              <div className="flex flex-row items-center justify-between w-full">
+                <Button size="sm" variant="light" isIconOnly onPress={onClose}>
+                  <Icon
+                    icon="tabler:chevron-left"
+                    width={24}
+                    className="text-[var(--tg-theme-text-color)]"
+                  />
+                </Button>
+                <span className="text-lg font-bold text-[var(--tg-theme-text-color)]">
+                  选择货币
+                </span>
+                <div />
               </div>
               <Input
                 radius="lg"
                 placeholder="搜索货币"
                 startContent={
-                  <Icon icon="tabler:search" className="text-defualt-300" />
+                  <Icon
+                    icon="tabler:search"
+                    className="text-[var(--tg-theme-text-color)]"
+                  />
                 }
                 value={search}
                 onValueChange={setSearch}
+                classNames={{
+                  input: cn(
+                    "group-data-[has-value=true]:text-[var(--tg-theme-text-color)]",
+                    "placeholder:text-[var(--tg-theme-hint-color)]"
+                  ),
+                  inputWrapper: cn(
+                    "bg-[var(--tg-theme-secondary-bg-color)]",
+                    "data-[hover=true]:bg-[var(--tg-theme-secondary-bg-color)]",
+                    "group-data-[focus=true]:bg-[var(--tg-theme-secondary-bg-color)]"
+                  ),
+                }}
               />
             </DrawerHeader>
             <ScrollShadow>
@@ -155,7 +118,7 @@ export const CurrencyDrawer = ({
                       key={index}
                       className={cn(
                         "bg-[var(--tg-theme-header-bg-color)]",
-                        "p-3 flex flex-row items-center justify-between cursor-pointer",
+                        "p-4 flex flex-row items-center justify-between cursor-pointer",
                         index < filtered.length - 1 &&
                           "border-b border-[var(--tg-theme-section-separator-color)]",
                         index === 0 && "rounded-t-large",

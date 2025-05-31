@@ -36,11 +36,13 @@ export class CurrencyUtil {
     baseValue?: number;
   }): number[] {
     return currencies.map((item) =>
-      this.getTargetRate({
-        from: currencies[baseIndex],
-        to: item,
-        value: baseValue,
-      })
+      parseFloat(
+        this.getTargetRate({
+          from: currencies[baseIndex],
+          to: item,
+          value: baseValue,
+        }).toFixed(4)
+      )
     );
   }
 }

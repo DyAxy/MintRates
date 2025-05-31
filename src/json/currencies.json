@@ -124,11 +124,6 @@
         "displayName": "白俄罗斯卢布",
         "symbol": "Br"
     },
-    "BYR": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e7-1f1fe.svg",
-        "displayName": "白俄罗斯卢布（旧）",
-        "symbol": "Br"
-    },
     "BZD": {
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e7-1f1ff.svg",
         "displayName": "伯利兹元",
@@ -148,11 +143,6 @@
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e8-1f1ed.svg",
         "displayName": "瑞士法郎",
         "symbol": "CHF"
-    },
-    "CLF": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e8-1f1f1.svg",
-        "displayName": "智利发展单位",
-        "symbol": "UF"
     },
     "CLP": {
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1e8-1f1f1.svg",
@@ -659,11 +649,6 @@
         "displayName": "圣赫勒拿镑",
         "symbol": "£"
     },
-    "SLE": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1f8-1f1f1.svg",
-        "displayName": "塞拉利昂利昂（新）",
-        "symbol": "Le"
-    },
     "SLL": {
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1f8-1f1f1.svg",
         "displayName": "塞拉利昂利昂",
@@ -791,7 +776,7 @@
     },
     "XAF": {
         "icon": "",
-        "displayName": "中非 CFA 法郎",
+        "displayName": "中非法郎",
         "symbol": ""
     },
     "XAG": {
@@ -809,14 +794,9 @@
         "displayName": "东加勒比元",
         "symbol": "$"
     },
-    "XDR": {
-        "icon": "",
-        "displayName": "特别提款权",
-        "symbol": ""
-    },
     "XOF": {
         "icon": "",
-        "displayName": "西非 CFA 法郎",
+        "displayName": "西非法郎",
         "symbol": ""
     },
     "XPF": {
@@ -833,11 +813,6 @@
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ff-1f1e6.svg",
         "displayName": "南非兰特",
         "symbol": "R"
-    },
-    "ZMK": {
-        "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ff-1f1f2.svg",
-        "displayName": "赞比亚克瓦查（旧）",
-        "symbol": ""
     },
     "ZMW": {
         "icon": "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f1ff-1f1f2.svg",
