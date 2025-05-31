@@ -5,7 +5,6 @@ import axios from "axios";
 import { CurrencyList } from "@/components/currencyList";
 import { RateFooter } from "@/components/rateFooter";
 import { useState } from "react";
-import { AppHeader } from "@/components/appHeader";
 
 export default function Home() {
   const [rateId, setRateId] = useState<string>("default");
@@ -23,8 +22,8 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        Loading...
+      <div className="flex items-center justify-center h-screen bg-[var(--tg-theme-bg-color)]">
+        <div className="w-10 h-10 border-4 border-t-[var(--tg-theme-accent-text-color)] border-[var(--tg-theme-hint-color)] rounded-full animate-spin"></div>
       </div>
     );
   }

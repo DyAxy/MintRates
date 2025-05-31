@@ -14,12 +14,12 @@ import {
   SwipeableListItem,
   SwipeAction,
   TrailingActions,
-  Type,
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 import { CurrencyDrawer } from "./currencyDrawer";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { hapticFeedback } from "@telegram-apps/sdk";
 
 export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
   const currencyUtil = new CurrencyUtil(rateData);
@@ -95,7 +95,10 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
           size="sm"
           variant="light"
           isIconOnly
-          onPress={onAddOpen}
+          onPress={() => {
+            hapticFeedback.impactOccurred("rigid");
+            onAddOpen();
+          }}
           className="absolute right-4"
         >
           <Icon
@@ -106,7 +109,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
         </Button>
       </div>
       <ScrollShadow>
-        <SwipeableList type={Type.ANDROID}>
+        <SwipeableList>
           {currencies.map((item, index) => (
             <SwipeableListItem
               key={index}
@@ -114,6 +117,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                 <LeadingActions>
                   <SwipeAction
                     onClick={() => {
+                      hapticFeedback.impactOccurred("rigid");
                       setSwipedIndex(index);
                       onOpen();
                     }}
@@ -133,6 +137,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                       if (currencies.length <= 1) {
                         return toast.error("至少保留一个货币");
                       }
+                      hapticFeedback.impactOccurred("rigid");
                       setCurrencies((prev) => {
                         const newCurrencies = [...prev];
                         newCurrencies.splice(index, 1);
@@ -158,9 +163,13 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                     "bg-[var(--tg-theme-secondary-bg-color)]"
                 )}
                 onClick={() => {
+                  if (selectedIndex !== index) {
+                    hapticFeedback.impactOccurred("rigid");
+                  }
                   setSelectedIndex(index);
                   setTimeout(() => {
                     if (inputRefs.current[index]) {
+                      console.log("Focusing input at index:", index);
                       inputRefs.current[index]?.focus();
                     }
                   }, 50);

@@ -12,6 +12,7 @@ import {
 import { useMemo } from "react";
 import rates from "@/json/rates.json";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { hapticFeedback } from "@telegram-apps/sdk-react";
 
 export const RateFooter = ({
   rateId,
@@ -37,7 +38,10 @@ export const RateFooter = ({
           "border-[var(--tg-theme-section-separator-color)]",
           "bg-[var(--tg-theme-secondary-bg-color)]"
         )}
-        onClick={onOpen}
+        onClick={() => {
+          hapticFeedback.impactOccurred("rigid");
+          onOpen();
+        }}
       >
         <span>汇率数据来自 </span>
         <span className="text-[var(--tg-theme-accent-text-color)]">
@@ -62,7 +66,10 @@ export const RateFooter = ({
                     size="sm"
                     variant="light"
                     isIconOnly
-                    onPress={onClose}
+                    onPress={() => {
+                      hapticFeedback.impactOccurred("rigid");
+                      onClose();
+                    }}
                     className="absolute left-0"
                   >
                     <Icon
@@ -88,6 +95,7 @@ export const RateFooter = ({
                         "rounded-b-large"
                       )}
                       onClick={() => {
+                        hapticFeedback.impactOccurred("rigid");
                         setRateId("default");
                         onClose();
                       }}

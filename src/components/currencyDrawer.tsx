@@ -11,6 +11,7 @@ import {
   ScrollShadow,
 } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { hapticFeedback } from "@telegram-apps/sdk-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -78,7 +79,10 @@ export const CurrencyDrawer = ({
                   size="sm"
                   variant="light"
                   isIconOnly
-                  onPress={onClose}
+                  onPress={() => {
+                    hapticFeedback.impactOccurred("rigid");
+                    onClose();
+                  }}
                   className="absolute left-0"
                 >
                   <Icon
@@ -132,6 +136,7 @@ export const CurrencyDrawer = ({
                       onClick={() => {
                         if (currencies.includes(item))
                           return toast.error("已显示该货币");
+                        hapticFeedback.impactOccurred("rigid");
                         setSearch("");
                         onClick(item);
                         onClose();
