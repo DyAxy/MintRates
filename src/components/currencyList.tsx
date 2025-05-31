@@ -20,14 +20,13 @@ import "react-swipeable-list/dist/styles.css";
 import { CurrencyDrawer } from "./currencyDrawer";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {} from "@telegram-apps/sdk";
 
 export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
   const currencyUtil = new CurrencyUtil(rateData);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const list = ["CNY"];
-  const [currencies, setCurrencies] = useState<string[]>(list);
+  const [currencies, setCurrencies] = useState<string[]>([]);
   const [numbers, setNumbers] = useState<number[]>([]);
 
   const [swipedIndex, setSwipedIndex] = useState<number | null>(null);
@@ -35,8 +34,20 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
   const [selectedValue, setSelectedValue] = useState<number>(100);
 
   useEffect(() => {
-    console.log(localStorage.setItem("test", "CNY"));
+    const valueCurreies = localStorage.getItem("currencies");
+    console.log("valueCurreies", valueCurreies);
+    if (valueCurreies) {
+      const storedCurrencies = valueCurreies.split(",");
+      setCurrencies(storedCurrencies);
+    } else {
+      setCurrencies(list);
+    }
   }, []);
+  useEffect(() => {
+    if (currencies.length > 0) {
+      localStorage.setItem("currencies", currencies.join(","));
+    }
+  }, [currencies]);
 
   useEffect(() => {
     if (numbers.length === 0) {
@@ -73,15 +84,20 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
     <>
       <div
         className={cn(
-          "flex items-center justify-between p-4",
+          "flex items-center justify-center p-4 relative",
           "bg-[var(--tg-theme-header-bg-color)]",
           "text-[var(--tg-theme-text-color)]",
           "sticky top-0 z-50"
         )}
       >
-        <div>{localStorage.getItem("test")}</div>
         <span className="text-large font-bold">汇率转换器</span>
-        <Button size="sm" variant="light" isIconOnly onPress={onAddOpen}>
+        <Button
+          size="sm"
+          variant="light"
+          isIconOnly
+          onPress={onAddOpen}
+          className="absolute right-4"
+        >
           <Icon
             icon="tabler:plus"
             width={24}

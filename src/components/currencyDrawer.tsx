@@ -73,8 +73,14 @@ export const CurrencyDrawer = ({
         {(onClose) => (
           <>
             <DrawerHeader className="p-4 w-full items-center flex flex-col gap-3 justify-center bg-[var(--tg-theme-bg-color)]">
-              <div className="flex flex-row items-center justify-between w-full">
-                <Button size="sm" variant="light" isIconOnly onPress={onClose}>
+              <div className="flex items-center justify-center relative w-full">
+                <Button
+                  size="sm"
+                  variant="light"
+                  isIconOnly
+                  onPress={onClose}
+                  className="absolute left-0"
+                >
                   <Icon
                     icon="tabler:chevron-left"
                     width={24}
@@ -84,7 +90,6 @@ export const CurrencyDrawer = ({
                 <span className="text-lg font-bold text-[var(--tg-theme-text-color)]">
                   选择货币
                 </span>
-                <div />
               </div>
               <Input
                 radius="lg"

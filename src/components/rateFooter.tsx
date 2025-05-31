@@ -57,12 +57,13 @@ export const RateFooter = ({
           {(onClose) => (
             <>
               <DrawerHeader className="p-4 w-full items-center flex flex-col justify-center bg-[var(--tg-theme-bg-color)]">
-                <div className="flex flex-row items-center justify-between w-full">
+                <div className="flex items-center justify-center relative w-full">
                   <Button
                     size="sm"
                     variant="light"
                     isIconOnly
                     onPress={onClose}
+                    className="absolute left-0"
                   >
                     <Icon
                       icon="tabler:chevron-down"
@@ -83,7 +84,6 @@ export const RateFooter = ({
                       className={cn(
                         "bg-[var(--tg-theme-header-bg-color)]",
                         "p-4 flex flex-row items-center justify-between cursor-pointer",
-                        "border-b border-[var(--tg-theme-section-separator-color)]",
                         "rounded-t-large",
                         "rounded-b-large"
                       )}
