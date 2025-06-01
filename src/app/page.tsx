@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-start h-dvh bg-[var(--tg-theme-bg-color)]">
       <div className="flex flex-col w-full">
-        {data && <CurrencyList rateData={data} />}
+        {data && <CurrencyList key={rateId} rateData={data} />}
       </div>
       <footer className="w-full">
         <RateFooter rateId={rateId} setRateId={setRateId} />
