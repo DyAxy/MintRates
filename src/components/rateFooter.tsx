@@ -87,21 +87,25 @@ export const RateFooter = ({
               <ScrollShadow>
                 <DrawerBody className="p-4">
                   <div className="flex flex-col">
-                    <div
-                      className={cn(
-                        "bg-[var(--tg-theme-header-bg-color)]",
-                        "p-4 flex flex-row items-center justify-between cursor-pointer",
-                        "rounded-t-large",
-                        "rounded-b-large"
-                      )}
-                      onClick={() => {
-                        hapticFeedback.impactOccurred("rigid");
-                        setRateId("default");
-                        onClose();
-                      }}
-                    >
-                      <div className="flex flex-row items-center gap-2">
-                        {/* <Image
+                    {rates.map((item, index) => (
+                      <div
+                        key={item.id}
+                        className={cn(
+                          "bg-[var(--tg-theme-header-bg-color)]",
+                          "p-4 flex flex-row items-center justify-between cursor-pointer",
+                          index < rates.length - 1 &&
+                            "border-b border-[var(--tg-theme-section-separator-color)]",
+                          index === 0 && "rounded-t-large",
+                          index === rates.length - 1 && "rounded-b-large"
+                        )}
+                        onClick={() => {
+                          hapticFeedback.impactOccurred("rigid");
+                          setRateId(item.id);
+                          onClose();
+                        }}
+                      >
+                        <div className="flex flex-row items-center gap-2">
+                          {/* <Image
                           radius="none"
                           src={
                             currencyList[item].icon ||
@@ -111,29 +115,30 @@ export const RateFooter = ({
                           width={32}
                           height={32}
                         /> */}
-                        <span className="text-md text-[var(--tg-theme-text-color)] font-semibold">
-                          默认汇率
-                        </span>
+                          <span className="text-md text-[var(--tg-theme-text-color)] font-semibold">
+                            {item.name}
+                          </span>
+                        </div>
+                        {rateId === item.id && (
+                          <Chip
+                            size="sm"
+                            classNames={{
+                              base: "border border-[var(--tg-theme-link-color)] bg-[var(--tg-theme-button-color)]",
+                              content:
+                                "font-bold text-[var(--tg-theme-button-text-color)]",
+                            }}
+                            startContent={
+                              <Icon
+                                icon="tabler:check"
+                                className="text-[var(--tg-theme-button-text-color)]"
+                              />
+                            }
+                          >
+                            已显示
+                          </Chip>
+                        )}
                       </div>
-                      {true && (
-                        <Chip
-                          size="sm"
-                          classNames={{
-                            base: "border border-[var(--tg-theme-link-color)] bg-[var(--tg-theme-button-color)]",
-                            content:
-                              "font-bold text-[var(--tg-theme-button-text-color)]",
-                          }}
-                          startContent={
-                            <Icon
-                              icon="tabler:check"
-                              className="text-[var(--tg-theme-button-text-color)]"
-                            />
-                          }
-                        >
-                          已显示
-                        </Chip>
-                      )}
-                    </div>
+                    ))}
                   </div>
                 </DrawerBody>
               </ScrollShadow>

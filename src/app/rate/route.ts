@@ -1,15 +1,13 @@
 import axios, { AxiosError } from "axios";
 
-const request = axios.create({
-  baseURL: "https://api.dy.ax/v1",
-  params: {
-    apiKey: process.env.API_KEY,
-  },
-});
+const endpoints =
+  "https://raw.githubusercontent.com/DyAxy/NewExchangeRatesTable/refs/heads/main/data/";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const { data } = await request.get("finance/rateall");
+    const { searchParams } = new URL(req.url);
+    const base = searchParams.get("base") || "default";
+    const { data } = await axios.get(endpoints + `${base}.json`);
     return Response.json(data.data);
   } catch (error) {
     return Response.json(

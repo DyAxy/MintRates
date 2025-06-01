@@ -35,7 +35,6 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
 
   useEffect(() => {
     const valueCurreies = localStorage.getItem("currencies");
-    console.log("valueCurreies", valueCurreies);
     if (valueCurreies) {
       const storedCurrencies = valueCurreies.split(",");
       setCurrencies(storedCurrencies);
@@ -85,12 +84,12 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
       <div
         className={cn(
           "flex items-center justify-center p-4 relative",
-          "bg-[var(--tg-theme-header-bg-color)]",
+          "bg-[var(--tg-theme-secondary-bg-color)]",
           "text-[var(--tg-theme-text-color)]",
           "sticky top-0 z-50"
         )}
       >
-        <span className="text-large font-bold">汇率转换器</span>
+        <span className="text-large font-bold">汇率转换</span>
         <Button
           size="sm"
           variant="light"
