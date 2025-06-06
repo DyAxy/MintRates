@@ -162,6 +162,9 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                     "bg-[var(--tg-theme-secondary-bg-color)]"
                 )}
                 onClick={() => {
+                  if (numbers[index] <= 0) {
+                    return;
+                  }
                   if (selectedIndex !== index) {
                     hapticFeedback.impactOccurred("rigid");
                   }
@@ -256,7 +259,9 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                   ) : (
                     <span className="w-full text-large font-medium pl-3 py-2 text-right text-[var(--tg-theme-subtitle-text-color)] truncate">
                       {numbers.length === currencies.length &&
-                        numbers[index].toFixed(4)}
+                      numbers[index] > 0
+                        ? numbers[index].toFixed(4)
+                        : "暂无数据"}
                     </span>
                   )}
                   <div className="flex flex-row items-center gap-1 text-xs">
