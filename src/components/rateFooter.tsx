@@ -10,9 +10,9 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useMemo } from "react";
-import rates from "@/json/rates.json";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { hapticFeedback } from "@telegram-apps/sdk-react";
+import useSWR from "swr";
 
 export const RateFooter = ({
   rateId,
@@ -21,19 +21,23 @@ export const RateFooter = ({
   rateId: string;
   setRateId: (id: string) => void;
 }) => {
+  const { data, isLoading } = useSWR(
+    "https://raw.githubusercontent.com/DyAxy/NewExchangeRatesTable/refs/heads/main/json/rates.json"
+  );
   const rate = useMemo(
-    () => rates.find((item) => item.id === rateId),
-    [rateId]
+    () => data?.find((item: RateItem) => item.id === rateId),
+    [rateId, data]
   );
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  if (isLoading) return null;
   return (
     <>
       <div
         className={cn(
           "text-[var(--tg-theme-hint-color)]",
-          "text-sm p-2 w-full",
+          "text-sm p-2 w-full cursor-pointer",
           "flex items-center border-t justify-end gap-1",
           "border-[var(--tg-theme-section-separator-color)]",
           "bg-[var(--tg-theme-secondary-bg-color)]"
@@ -87,16 +91,16 @@ export const RateFooter = ({
               <ScrollShadow>
                 <DrawerBody className="p-4">
                   <div className="flex flex-col">
-                    {rates.map((item, index) => (
+                    {data?.map((item: RateItem, index: number) => (
                       <div
                         key={item.id}
                         className={cn(
                           "bg-[var(--tg-theme-header-bg-color)]",
                           "p-4 flex flex-row items-center justify-between cursor-pointer",
-                          index < rates.length - 1 &&
+                          index < data.length - 1 &&
                             "border-b border-[var(--tg-theme-section-separator-color)]",
                           index === 0 && "rounded-t-large",
-                          index === rates.length - 1 && "rounded-b-large"
+                          index === data.length - 1 && "rounded-b-large"
                         )}
                         onClick={() => {
                           hapticFeedback.impactOccurred("rigid");

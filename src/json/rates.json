@@ -1,11 +1,7 @@
 [
     {
-        "id": "default",
-        "name": "默认汇率"
-    },
-    {
         "id": "neutrino",
-        "name": "自有汇率"
+        "name": "默认汇率"
     },
     {
         "id": "wise",
@@ -18,5 +14,9 @@
     {
         "id": "unionpay",
         "name": "银联"
+    },
+    {
+        "id": "coinbase",
+        "name": "Coinbase"
     }
 ]

@@ -1,7 +1,6 @@
 "use client";
 
 import useSWR from "swr";
-import axios from "axios";
 import { CurrencyList } from "@/components/currencyList";
 import { RateFooter } from "@/components/rateFooter";
 import { useEffect, useState } from "react";
@@ -11,25 +10,24 @@ export default function Home() {
   useEffect(() => {
     const database = localStorage.getItem("database");
     if (database) {
-      setRateId(database);
+      // removed default
+      if (database !== "default") {
+        setRateId(database);
+      } else {
+        setRateId("neutrino");
+      }
     } else {
-      setRateId("default");
+      setRateId("neutrino");
     }
   }, []);
   useEffect(() => {
     localStorage.setItem("database", rateId);
   }, [rateId]);
 
+  const endpoint =
+    "https://raw.githubusercontent.com/DyAxy/NewExchangeRatesTable/refs/heads/main/data/";
   const { data, isLoading } = useSWR(
-    rateId ? `rate?base=${rateId}` : null,
-    async (url: string) => {
-      try {
-        const { data } = await axios.get(url);
-        return data;
-      } catch (e) {
-        throw e;
-      }
-    }
+    rateId ? `${endpoint}${rateId}.json` : null
   );
 
   if (isLoading || !rateId) {

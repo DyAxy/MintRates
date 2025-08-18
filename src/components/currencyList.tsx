@@ -20,8 +20,12 @@ import { CurrencyDrawer } from "./currencyDrawer";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { hapticFeedback } from "@telegram-apps/sdk";
+import useSWR from "swr";
 
 export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
+  const { data, isLoading } = useSWR(
+    "https://raw.githubusercontent.com/DyAxy/NewExchangeRatesTable/refs/heads/main/json/currencies.json"
+  );
   const currencyUtil = new CurrencyUtil(rateData);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -79,6 +83,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
     onOpenChange: onAddOpenChange,
   } = useDisclosure();
 
+  if (isLoading) return null;
   return (
     <>
       <div
@@ -181,7 +186,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                   <Image
                     radius="none"
                     src={
-                      currencyUtil.currencyList[item].icon ||
+                      data[item].icon ||
                       "https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/2753.svg"
                     }
                     alt={item}
@@ -189,7 +194,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                     height={32}
                   />
                   <span className="text-lg text-[var(--tg-theme-text-color)] font-semibold">
-                    {currencyUtil.currencyList[item].displayName}
+                    {data[item].displayName}
                   </span>
                 </div>
                 <div className="flex flex-col items-end max-w-[50%]">
@@ -269,7 +274,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
                       {item}
                     </span>
                     <span className="text-[var(--tg-theme-subtitle-text-color)]">
-                      {currencyUtil.currencyList[item].symbol}
+                      {data[item].symbol}
                     </span>
                   </div>
                 </div>
@@ -281,7 +286,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
       <CurrencyDrawer
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        currencyList={currencyUtil.currencyList}
+        currencyList={data}
         currencies={currencies}
         onClick={(currency) => {
           setCurrencies((prev) => {
@@ -296,7 +301,7 @@ export const CurrencyList = ({ rateData }: { rateData: CurrencyRate }) => {
       <CurrencyDrawer
         isOpen={isAddOpen}
         onOpenChange={onAddOpenChange}
-        currencyList={currencyUtil.currencyList}
+        currencyList={data}
         currencies={currencies}
         onClick={(currency) => {
           if (currencies.includes(currency)) {

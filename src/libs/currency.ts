@@ -1,8 +1,5 @@
-import currencylist from "@/json/currencies.json";
-
 export class CurrencyUtil {
   private rateData: CurrencyRate;
-  public currencyList: CurrencyList = currencylist;
 
   constructor(rateData: CurrencyRate) {
     this.rateData = rateData;

@@ -8,3 +8,7 @@ interface CurrencyList {
     symbol: string;
   };
 }
+interface RateItem {
+  id: string;
+  name: string;
+}
